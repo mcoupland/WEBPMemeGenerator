@@ -13,7 +13,27 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private double _currentTimeSeconds;
     private int _imageWidth;
     private int _imageHeight;
-    private int _currentFrame;
+    private int _currentFrame; 
+    private double _fontSize = 48;
+    private int _frameCount;
+
+    public int MaxFrameIndex => Math.Max(0, FrameCount - 1);
+
+    public ObservableCollection<TextSegmentModel> TextSegments { get; } = new();
+
+    public double FontSize
+    {
+        get => _fontSize;
+        set
+        {
+            if (_fontSize == value)
+                return;
+
+            _fontSize = value;
+            OnPropertyChanged();
+        }
+    }
+
     public int CurrentFrame
     {
         get => _currentFrame;
@@ -25,7 +45,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    private int _frameCount;
     public int FrameCount
     {
         get => _frameCount;
@@ -37,9 +56,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(MaxFrameIndex));
         }
     }
-    public int MaxFrameIndex => Math.Max(0, FrameCount - 1);    
-
-    public ObservableCollection<TextSegmentModel> TextSegments { get; } = new();
 
     public string FileName
     {
@@ -86,13 +102,18 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public string CurrentTimeDisplay => $"{CurrentTimeSeconds:0.00}s / {DurationSeconds:0.00}s";
 
+    public IReadOnlyList<double> FontSizes { get; } =
+    [
+        8, 9, 10, 11, 12, 14, 16, 18,
+        20, 22, 24, 26, 28, 36, 48, 72
+    ];
+
     public void SetFile(string path)
     {
         FileName = Path.GetFileName(path);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-
     private void OnPropertyChanged([CallerMemberName] string? name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

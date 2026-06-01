@@ -5,7 +5,6 @@
         Title="WEBP Text Editor"
         Width="1200"
         Height="800"
-        WindowState="Maximized"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -17,28 +16,31 @@
 
         <Border Grid.Row="0">
             <DockPanel>
-                <Button Content="Browse WEBP" Click="BrowseButton_Click"/>
+                <Button DockPanel.Dock="Left" Content="Browse WEBP" Click="BrowseButton_Click"/>
 
-                <TextBlock Text="{Binding FileName}"
-                       VerticalAlignment="Center"
-                       FontWeight="SemiBold"
-                       TextTrimming="CharacterEllipsis"/>
+                <TextBlock DockPanel.Dock="Left"
+                           Text="{Binding FileName}"
+                           VerticalAlignment="Center"
+                           FontWeight="SemiBold"
+                           TextTrimming="CharacterEllipsis"/>
             </DockPanel>
         </Border>
 
         <Border Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Grid Width="{Binding ImageWidth}"
+                
+                <Grid Grid.Column="0"
+                      Margin="0"                      
+                      Width="{Binding ImageWidth}"
                       Height="{Binding ImageHeight}">
-                    <skia:SKElement PaintSurface="SkiaImage_PaintSurface" Name="SkiaControl"/>
-                    <Canvas x:Name="TextOverlayCanvas" Background="Transparent" />
+                    <skia:SKElement Margin="0" PaintSurface="SkiaImage_PaintSurface" Name="SkiaControl"/>
                 </Grid>
 
-                <Grid Grid.Column="2">
+                <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
@@ -46,9 +48,7 @@
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>                        
                     </Grid.ColumnDefinitions>
 
                     <Button Content="Add Text Segment"
@@ -56,30 +56,28 @@
                             Grid.Column="0"
                             HorizontalAlignment="Left"
                             Click="AddTextSegment_Click"/>
-
-                    <Button Content="Decrease Font Size"                        
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        HorizontalAlignment="Left"/>
                     
-                    <Label Content="Font Size"
-                           Grid.Row="0"
-                           Grid.Column="2"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
-
-                    <Button Content="Increase Font Size"
-                        Grid.Row="0"
-                        Grid.Column="3"
-                        HorizontalAlignment="Left"/>
-
+                    <ComboBox Grid.Row="0" 
+                              Grid.Column="1"
+                              Grid.ColumnSpan="2"
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding DataContext.FontSizes, RelativeSource={RelativeSource AncestorType=Window}}"
+                              SelectedItem="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" />
+                                        
                     <DataGrid ItemsSource="{Binding TextSegments}"
+                              AutoGenerateColumns="False"
                               Grid.Row="1"
                               Grid.Column="0"
-                              Grid.ColumnSpan="4">
+                              Grid.ColumnSpan="2">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Text" Binding="{Binding Text}" />
-                            <DataGridTextColumn Header="Start" Binding="{Binding StartFrame}" />
+                            <DataGridTextColumn Header="Text">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="Text"
+                                         Mode="TwoWay"
+                                         UpdateSourceTrigger="PropertyChanged" />
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Start" Binding="{Binding StartFrame}" />
                             <DataGridTextColumn Header="Stop" Binding="{Binding StopFrame}" />
 
                             <DataGridTemplateColumn Header="Remove">

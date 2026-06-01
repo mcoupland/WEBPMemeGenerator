@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 using WEBPMemeGenerator.Models;
-using System.Windows.Data;
+using System.Linq;
 
 namespace WEBPMemeGenerator;
 
@@ -24,6 +24,8 @@ public partial class MainWindow : Window
     private double[] _frameStartTimes = [];
     private int[] _frameDurations = [];
     private string? _selectedWebpPath = string.Empty;
+    private const double OverlayLabelTopPadding = 10;
+    private const double OverlayLabelVerticalSpacing = 55;
 
     public ObservableCollection<TextSegmentModel> TextSegments { get; } = new();
 
@@ -44,35 +46,28 @@ public partial class MainWindow : Window
             LoadFrame(_vm.CurrentFrame);
             SkiaControl.InvalidateVisual();
         }
+        else if (e.PropertyName == nameof(MainViewModel.FontSize))
+        {
+            SkiaControl.InvalidateVisual();
+        }
     }
 
     #region Add/Remove Text Segments
     private void AddTextSegment_Click(object sender, RoutedEventArgs e)
     {
+        var startFrame = _vm.TextSegments.Count == 0 ? 0 : _vm.TextSegments.Last().StopFrame;
+        startFrame = startFrame < _vm.MaxFrameIndex ? startFrame : 0;
         var textSegment = new TextSegmentModel
         {
             Text = "New text",
-            StartFrame = 0,
+            StartFrame = startFrame,
             StopFrame = _vm.MaxFrameIndex,
             MaxFrame = _vm.MaxFrameIndex
         };
 
         _vm.TextSegments.Add(textSegment);
-
-        var label = new Label
-        {
-            DataContext = textSegment,
-            Width = _vm.ImageWidth,
-            Foreground = System.Windows.Media.Brushes.Red,
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
-
-        label.SetBinding(ContentControl.ContentProperty, new Binding(nameof(TextSegmentModel.Text)));
-
-        Canvas.SetLeft(label, 0);
-        Canvas.SetTop(label, 0);
-
-        TextOverlayCanvas.Children.Add(label);
+        textSegment.PropertyChanged += (_, _) => SkiaControl.InvalidateVisual();
+        SkiaControl.InvalidateVisual();
     }
     private void RemoveTextSegment_Click(object sender, RoutedEventArgs e)
     {
@@ -116,6 +111,10 @@ public partial class MainWindow : Window
 
         var info = _codec.Info;
 
+        _frameDurations = _codec.FrameInfo.Select(frame => frame.Duration).ToArray();
+        _vm.FrameCount = _codec.FrameCount;
+        _vm.CurrentFrame = 0;
+
         _bitmap = new SKBitmap(info.Width, info.Height);
         _codec.GetPixels(_bitmap.Info, _bitmap.GetPixels());
         _vm.ImageWidth = info.Width;
@@ -136,7 +135,67 @@ public partial class MainWindow : Window
             return;
 
         canvas.DrawBitmap(_bitmap, e.Info.Rect);
+
+        DrawTextSegments(canvas, e.Info.Width);
     }
+
+    private void DrawTextSegments(SKCanvas canvas, int canvasWidth)
+    {
+        var visibleSegments = _vm.TextSegments
+            .Where(segment =>
+                _vm.CurrentFrame >= segment.StartFrame &&
+                _vm.CurrentFrame <= segment.StopFrame)
+            .ToList();
+
+        using var typeface = SKTypeface.FromFamilyName("Montserrat");
+        using var font = new SKFont(typeface, (float)_vm.FontSize)
+        {
+            Edging = SKFontEdging.Antialias
+        };
+
+        using var fillPaint = new SKPaint
+        {
+            Color = SKColors.White,
+            IsAntialias = true
+        };
+
+        using var shadowPaint = new SKPaint
+        {
+            Color = SKColors.Black,
+            IsAntialias = true
+        };
+
+        const float topPadding = 10f;
+        const float lineSpacing = 10f;
+
+        for (var i = 0; i < visibleSegments.Count; i++)
+        {
+            var text = visibleSegments[i].Text ?? string.Empty;
+
+            var y = (float)(topPadding + (_vm.FontSize + lineSpacing) * i + (float)_vm.FontSize);
+            float x = GetCenteredX(text, font, canvasWidth);
+
+            canvas.DrawText(text,
+                new SKPoint(x + 2, y + 2),
+                font,
+                shadowPaint);
+
+            canvas.DrawText(text,
+                new SKPoint(x, y),
+                font,
+                fillPaint);
+        }
+    }
+    private float GetCenteredX(string text, SKFont font, int canvasWidth)
+    {
+        var bounds = new SKRect();
+        font.MeasureText(text, out bounds);
+
+        var textWidth = bounds.Right - bounds.Left;
+        return (canvasWidth - textWidth) / 2;
+        //return (_vm.ImageWidth / 2f) - ((bounds.Left + bounds.Right) / 2f);
+    }
+
     private void LoadFrame(int frameIndex)
     {
         if (_codec is null || _bitmap is null)
@@ -210,7 +269,7 @@ public partial class MainWindow : Window
         if (delayMs <= 0)
             delayMs = 100;
 
-        _playbackTimer.Interval = TimeSpan.FromMilliseconds(delayMs);
+        _playbackTimer.Interval = TimeSpan.FromMilliseconds(delayMs*0.95);
     }
     #endregion
 }
