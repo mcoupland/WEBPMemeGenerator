@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         <Label Content="Text:"/>
 
-        <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <xctk:IntegerUpDown Value="{Binding StartFrame, UpdateSourceTrigger=PropertyChanged}"
                     Minimum="1"

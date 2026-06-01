@@ -6,8 +6,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Threading;
 using WEBPMemeGenerator.Models;
+using System.Windows.Data;
 
 namespace WEBPMemeGenerator;
 
@@ -47,15 +49,30 @@ public partial class MainWindow : Window
     #region Add/Remove Text Segments
     private void AddTextSegment_Click(object sender, RoutedEventArgs e)
     {
-        var model = new TextSegmentModel
+        var textSegment = new TextSegmentModel
         {
             Text = "New text",
-            StartFrame = 1,
-            StopFrame = _frames.Length,
-            MaxFrame = _frames.Length
+            StartFrame = 0,
+            StopFrame = _vm.MaxFrameIndex,
+            MaxFrame = _vm.MaxFrameIndex
         };
 
-        _vm.TextSegments.Add(model);
+        _vm.TextSegments.Add(textSegment);
+
+        var label = new Label
+        {
+            DataContext = textSegment,
+            Width = _vm.ImageWidth,
+            Foreground = System.Windows.Media.Brushes.Red,
+            HorizontalContentAlignment = HorizontalAlignment.Center
+        };
+
+        label.SetBinding(ContentControl.ContentProperty, new Binding(nameof(TextSegmentModel.Text)));
+
+        Canvas.SetLeft(label, 0);
+        Canvas.SetTop(label, 0);
+
+        TextOverlayCanvas.Children.Add(label);
     }
     private void RemoveTextSegment_Click(object sender, RoutedEventArgs e)
     {

@@ -32,10 +32,11 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Border Width="{Binding ImageWidth}"
-                        Height="{Binding ImageHeight}">
+                <Grid Width="{Binding ImageWidth}"
+                      Height="{Binding ImageHeight}">
                     <skia:SKElement PaintSurface="SkiaImage_PaintSurface" Name="SkiaControl"/>
-                </Border>
+                    <Canvas x:Name="TextOverlayCanvas" Background="Transparent" />
+                </Grid>
 
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
@@ -45,6 +46,7 @@
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
@@ -59,16 +61,22 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         HorizontalAlignment="Left"/>
+                    
+                    <Label Content="Font Size"
+                           Grid.Row="0"
+                           Grid.Column="2"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
 
                     <Button Content="Increase Font Size"
                         Grid.Row="0"
-                        Grid.Column="2"
+                        Grid.Column="3"
                         HorizontalAlignment="Left"/>
 
                     <DataGrid ItemsSource="{Binding TextSegments}"
                               Grid.Row="1"
                               Grid.Column="0"
-                              Grid.ColumnSpan="3">
+                              Grid.ColumnSpan="4">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Text" Binding="{Binding Text}" />
                             <DataGridTextColumn Header="Start" Binding="{Binding StartFrame}" />
@@ -83,7 +91,6 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
-
                     </DataGrid>
                 </Grid>
             </Grid>

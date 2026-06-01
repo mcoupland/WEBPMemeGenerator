@@ -34,8 +34,6 @@ public class TextSegmentModel : INotifyPropertyChanged
         set => SetField(ref _maxFrame, value);
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
         if (Equals(field, value))
@@ -44,4 +42,10 @@ public class TextSegmentModel : INotifyPropertyChanged
         field = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? name = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
 }
