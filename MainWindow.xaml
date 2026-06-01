@@ -65,6 +65,9 @@
                               SelectedItem="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" />
                                         
                     <DataGrid ItemsSource="{Binding TextSegments}"
+                              SelectedItem="{Binding SelectedTextSegment, Mode=TwoWay}"
+                              RowStyle="{StaticResource TextSegmentRowStyle}"
+                              CellStyle="{StaticResource TextSegmentCellStyle}"
                               AutoGenerateColumns="False"
                               Grid.Row="1"
                               Grid.Column="0"
@@ -117,7 +120,8 @@
 
             <Button Grid.Row="0"
                     Grid.Column="3" 
-                    Content="Save"/>
+                    Content="Save"
+                    Click="SaveButton_Click"/>
         </Grid>
     </Grid>
 </Window>

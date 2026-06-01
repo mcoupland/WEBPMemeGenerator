@@ -10,6 +10,8 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using WEBPMemeGenerator.Models;
 using System.Linq;
+using ImageMagick;
+using Microsoft.Win32;
 
 namespace WEBPMemeGenerator;
 
@@ -55,7 +57,7 @@ public partial class MainWindow : Window
     #region Add/Remove Text Segments
     private void AddTextSegment_Click(object sender, RoutedEventArgs e)
     {
-        var startFrame = _vm.TextSegments.Count == 0 ? 0 : _vm.TextSegments.Last().StopFrame;
+        var startFrame = _vm.TextSegments.Count == 0 ? 0 : _vm.TextSegments.Last().StopFrame + 1;
         startFrame = startFrame < _vm.MaxFrameIndex ? startFrame : 0;
         var textSegment = new TextSegmentModel
         {
@@ -269,7 +271,103 @@ public partial class MainWindow : Window
         if (delayMs <= 0)
             delayMs = 100;
 
-        _playbackTimer.Interval = TimeSpan.FromMilliseconds(delayMs*0.95);
+        _playbackTimer.Interval = TimeSpan.FromMilliseconds(delayMs);
+    }
+    #endregion
+
+    #region Save WEBP
+    private void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new SaveFileDialog
+        {
+            Title = "Save WEBP",
+            Filter = "WEBP files (*.webp)|*.webp",
+            DefaultExt = ".webp"
+        };
+
+        if (dialog.ShowDialog(this) != true)
+            return;
+
+        SaveAnimatedWebp(dialog.FileName);
+    }
+    private void SaveAnimatedWebp(string outputPath)
+    {
+        if (_codec is null)
+            return;
+
+        var width = _codec.Info.Width;
+        var height = _codec.Info.Height;
+
+        using var collection = new MagickImageCollection();
+
+        for (var frameIndex = 0; frameIndex < _codec.FrameCount; frameIndex++)
+        {
+            using var bitmap = new SKBitmap(width, height);
+            var options = new SKCodecOptions(frameIndex);
+
+            _codec.GetPixels(bitmap.Info, bitmap.GetPixels(), options);
+
+            using var surface = SKSurface.Create(new SKImageInfo(width, height));
+            var canvas = surface.Canvas;
+
+            canvas.Clear(SKColors.Transparent);
+            canvas.DrawBitmap(bitmap, 0, 0);
+
+            DrawTextSegmentsForFrame(canvas, frameIndex, width);
+
+            using var image = surface.Snapshot();
+            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+
+            using var magickImage = new MagickImage(data.ToArray());
+
+            var delayMs = frameIndex < _frameDurations.Length
+                ? _frameDurations[frameIndex]
+                : 100;
+
+            magickImage.AnimationDelay = Convert.ToUInt32(Math.Max(1, delayMs / 10)); // centiseconds
+            magickImage.AnimationIterations = 0; // loop forever
+
+            collection.Add(magickImage.Clone());
+        }
+
+        collection.Write(outputPath, MagickFormat.WebP);
+    }
+    private void DrawTextSegmentsForFrame(SKCanvas canvas, int frameIndex, int imageWidth)
+    {
+        var visibleSegments = _vm.TextSegments
+            .Where(segment =>
+                frameIndex >= segment.StartFrame &&
+                frameIndex <= segment.StopFrame)
+            .ToList();
+
+        using var typeface = SKTypeface.FromFamilyName("Montserrat");
+        using var font = new SKFont(typeface, (float)_vm.FontSize);
+
+        using var fillPaint = new SKPaint
+        {
+            Color = SKColors.White,
+            IsAntialias = true
+        };
+
+        using var shadowPaint = new SKPaint
+        {
+            Color = SKColors.Black,
+            IsAntialias = true
+        };
+
+        const float topPadding = 10f;
+        const float lineSpacing = 10f;
+
+        for (var i = 0; i < visibleSegments.Count; i++)
+        {
+            var text = visibleSegments[i].Text ?? string.Empty;
+
+            var y = topPadding + ((float)_vm.FontSize + lineSpacing) * i + (float)_vm.FontSize;
+            var x = GetCenteredX(text, font, imageWidth);
+
+            canvas.DrawText(text, new SKPoint(x + 2, y + 2), font, shadowPaint);
+            canvas.DrawText(text, new SKPoint(x, y), font, fillPaint);
+        }
     }
     #endregion
 }

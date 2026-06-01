@@ -16,7 +16,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private int _currentFrame; 
     private double _fontSize = 48;
     private int _frameCount;
-
+    private TextSegmentModel? _selectedTextSegment;
+        
     public int MaxFrameIndex => Math.Max(0, FrameCount - 1);
 
     public ObservableCollection<TextSegmentModel> TextSegments { get; } = new();
@@ -107,7 +108,21 @@ public sealed class MainViewModel : INotifyPropertyChanged
         8, 9, 10, 11, 12, 14, 16, 18,
         20, 22, 24, 26, 28, 36, 48, 72
     ];
+    public TextSegmentModel? SelectedTextSegment
+    {
+        get => _selectedTextSegment;
+        set
+        {
+            if (_selectedTextSegment == value)
+                return;
 
+            _selectedTextSegment = value;
+            OnPropertyChanged();
+
+            if (_selectedTextSegment is not null)
+                CurrentFrame = _selectedTextSegment.StartFrame;
+        }
+    }
     public void SetFile(string path)
     {
         FileName = Path.GetFileName(path);

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.13.1" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="SkiaSharp" Version="3.119.4" />
     <PackageReference Include="SkiaSharp.Views.WPF" Version="3.119.4" />
@@ -18,6 +19,7 @@
   <ItemGroup>
     <Folder Include="Fonts\" />
     <Folder Include="Themes\" />
+    <Folder Include="Views\" />
   </ItemGroup>
 
 </Project>
