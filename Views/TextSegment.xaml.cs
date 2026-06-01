@@ -20,6 +20,8 @@ namespace WEBPMemeGenerator
     public partial class TextSegmentControl : UserControl
     {
         private TextSegmentModel _textSegment;
+        private int _startFrame;
+        private int _endFrame;
 
         public TextSegmentControl()
         {

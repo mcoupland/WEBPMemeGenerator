@@ -71,7 +71,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Text"/>
                             <DataGridTextColumn Header="Start Frame"/>
-                            <DataGridTextColumn Header="Stop Frame"/>
+                            <DataGridTextColumn Header="End Frame"/>
 
                             <DataGridTemplateColumn Header="Remove" Width="90">
                                 <DataGridTemplateColumn.CellTemplate>
