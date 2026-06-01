@@ -17,7 +17,7 @@
 
         <Border Grid.Row="0">
             <DockPanel>
-                <Button Content="Browse WEBP"/>
+                <Button Content="Browse WEBP" Click="BrowseButton_Click"/>
 
                 <TextBlock Text="{Binding FileName}"
                        VerticalAlignment="Center"
@@ -26,14 +26,16 @@
             </DockPanel>
         </Border>
 
-
         <Border Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <skia:SKElement x:Name="PreviewCanvas"/>
+                <Border Width="{Binding ImageWidth}"
+                        Height="{Binding ImageHeight}">
+                    <skia:SKElement PaintSurface="SkiaImage_PaintSurface" Name="SkiaControl"/>
+                </Border>
 
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
@@ -95,13 +97,18 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" 
-                    Content="Play"/>
-
-            <Slider Grid.Column="1"
+            <Button x:Name="PlayPauseButton"
+                    Grid.Column="0"
+                    Content="Play"
+                    Click="PlayPauseButton_Click" />
+            
+            <Slider Grid.Column="1" 
                     Minimum="0"
-                    Maximum="0"
-                    VerticalAlignment="Center"/>
+                    Maximum="{Binding MaxFrameIndex}"
+                    Value="{Binding CurrentFrame, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    IsSnapToTickEnabled="True"
+                    TickPlacement="BottomRight"
+                    TickFrequency="1" />
 
             <Button Grid.Row="0"
                     Grid.Column="3" 

@@ -11,6 +11,33 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private string _fileName = "No file selected";
     private double _durationSeconds;
     private double _currentTimeSeconds;
+    private int _imageWidth;
+    private int _imageHeight;
+    private int _currentFrame;
+    public int CurrentFrame
+    {
+        get => _currentFrame;
+        set
+        {
+            if (_currentFrame == value) return;
+            _currentFrame = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private int _frameCount;
+    public int FrameCount
+    {
+        get => _frameCount;
+        set
+        {
+            if (_frameCount == value) return;
+            _frameCount = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(MaxFrameIndex));
+        }
+    }
+    public int MaxFrameIndex => Math.Max(0, FrameCount - 1);    
 
     public ObservableCollection<TextSegmentModel> TextSegments { get; } = new();
 
@@ -37,8 +64,27 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    public string CurrentTimeDisplay =>
-        $"{CurrentTimeSeconds:0.00}s / {DurationSeconds:0.00}s";
+    public int ImageWidth
+    {
+        get => _imageWidth;
+        set
+        {
+            _imageWidth = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int ImageHeight
+    {
+        get => _imageHeight;
+        set
+        {
+            _imageHeight = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string CurrentTimeDisplay => $"{CurrentTimeSeconds:0.00}s / {DurationSeconds:0.00}s";
 
     public void SetFile(string path)
     {
