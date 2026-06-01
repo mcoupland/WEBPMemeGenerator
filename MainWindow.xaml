@@ -16,9 +16,12 @@
 
         <Border Grid.Row="0">
             <DockPanel>
-                <Button DockPanel.Dock="Left" Content="Browse WEBP" Click="BrowseButton_Click"/>
+                <Button DockPanel.Dock="Left" 
+                        Content="Browse WEBP" 
+                        Click="BrowseButton_Click"/>
 
                 <TextBlock DockPanel.Dock="Left"
+                           Style="{StaticResource DefaultTextBlockStyle}"
                            Text="{Binding FileName}"
                            VerticalAlignment="Center"
                            FontWeight="SemiBold"
@@ -54,13 +57,10 @@
                     <Button Content="Add Text Segment"
                             Grid.Row="0"
                             Grid.Column="0"
-                            HorizontalAlignment="Left"
                             Click="AddTextSegment_Click"/>
                     
                     <ComboBox Grid.Row="0" 
                               Grid.Column="1"
-                              Grid.ColumnSpan="2"
-                              HorizontalAlignment="Stretch"
                               ItemsSource="{Binding DataContext.FontSizes, RelativeSource={RelativeSource AncestorType=Window}}"
                               SelectedItem="{Binding DataContext.FontSize, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}" />
                                         
@@ -68,21 +68,19 @@
                               SelectedItem="{Binding SelectedTextSegment, Mode=TwoWay}"
                               RowStyle="{StaticResource TextSegmentRowStyle}"
                               CellStyle="{StaticResource TextSegmentCellStyle}"
-                              AutoGenerateColumns="False"
                               Grid.Row="1"
                               Grid.Column="0"
                               Grid.ColumnSpan="2">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Text">
-                            <DataGridTextColumn.Binding>
-                                <Binding Path="Text"
-                                         Mode="TwoWay"
-                                         UpdateSourceTrigger="PropertyChanged" />
-                            </DataGridTextColumn.Binding>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Start" Binding="{Binding StartFrame}" />
+                            <DataGridTextColumn Header="Text" Width="*">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="Text"
+                                             Mode="TwoWay"
+                                             UpdateSourceTrigger="PropertyChanged" />
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Start" Binding="{Binding StartFrame}" />
                             <DataGridTextColumn Header="Stop" Binding="{Binding StopFrame}" />
-
                             <DataGridTemplateColumn Header="Remove">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>

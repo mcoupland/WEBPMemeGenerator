@@ -5,7 +5,7 @@ namespace WEBPMemeGenerator.Models;
 
 public class TextSegmentModel : INotifyPropertyChanged
 {
-    private string _text = "New text";
+    private string _text = string.Empty;
     private int _startFrame = 1;
     private int _stopFrame = 1;
     private int _maxFrame = 1;

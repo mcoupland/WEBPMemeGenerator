@@ -61,7 +61,6 @@ public partial class MainWindow : Window
         startFrame = startFrame < _vm.MaxFrameIndex ? startFrame : 0;
         var textSegment = new TextSegmentModel
         {
-            Text = "New text",
             StartFrame = startFrame,
             StopFrame = _vm.MaxFrameIndex,
             MaxFrame = _vm.MaxFrameIndex
@@ -99,6 +98,8 @@ public partial class MainWindow : Window
     }
     private void LoadWebp(string path)
     {
+        ResetWebpState();
+
         _selectedWebpPath = path;
         _vm.SetFile(path);
 
@@ -124,6 +125,31 @@ public partial class MainWindow : Window
         _vm.FrameCount = _codec.FrameCount;
         _vm.CurrentFrame = 0;
         SkiaControl.InvalidateVisual(); // use your SKElement name here
+    }
+
+    private void ResetWebpState()
+    {
+        PausePlayback();
+
+        _selectedWebpPath = null;
+
+        _codec?.Dispose();
+        _codec = null;
+
+        _bitmap?.Dispose();
+        _bitmap = null;
+
+        _frameDurations = [];
+
+        _vm.CurrentFrame = 0;
+        _vm.FrameCount = 0;
+        _vm.ImageWidth = 0;
+        _vm.ImageHeight = 0;
+        _vm.SelectedTextSegment = null;
+
+        _vm.TextSegments.Clear();
+
+        SkiaControl.InvalidateVisual();
     }
     #endregion
 
