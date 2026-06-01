@@ -1,11 +1,9 @@
-﻿using Microsoft.Win32;
-using SkiaSharp;
-using SkiaSharp.Views.Desktop;
-using System.Drawing;
-using System.IO;
+﻿using SkiaSharp;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
-using WEBPMemeGenerator.Classes;
+using WEBPMemeGenerator.Models;
 
 namespace WEBPMemeGenerator;
 
@@ -23,8 +21,7 @@ public partial class MainWindow : Window
     private SKBitmap[] _frames = [];
     private double[] _frameStartTimes = [];
     private double[] _frameDurations = [];
-
-    private static List<TextSegmentControl> _textSegments = new();
+    public ObservableCollection<TextSegmentModel> TextSegments { get; } = new();
 
     public MainWindow()
     {
@@ -38,10 +35,18 @@ public partial class MainWindow : Window
         {
             Text = "New text",
             StartFrame = 1,
-            EndFrame = _frames.Length,
+            StopFrame = _frames.Length,
             MaxFrame = _frames.Length
         };
 
-        var control = new TextSegmentControl(model);
+        _vm.TextSegments.Add(model);
+    }
+    private void RemoveTextSegment_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button &&
+            button.DataContext is TextSegmentModel textSegment)
+        {
+            _vm.TextSegments.Remove(textSegment);
+        }
     }
 }

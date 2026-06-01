@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using WEBPMemeGenerator.Classes;
+using WEBPMemeGenerator.Models;
 
 namespace WEBPMemeGenerator;
 

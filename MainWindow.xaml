@@ -63,28 +63,25 @@
                         Grid.Column="2"
                         HorizontalAlignment="Left"/>
 
-                    <DataGrid Grid.Row="1"
-                          Grid.ColumnSpan="3"
-                          ItemsSource="{Binding TextSegments}"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          SelectionMode="Single">
+                    <DataGrid ItemsSource="{Binding TextSegments}"
+                              Grid.Row="1"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Text"/>
-                            <DataGridTextColumn Header="Start Frame"/>
-                            <DataGridTextColumn Header="End Frame"/>
+                            <DataGridTextColumn Header="Text" Binding="{Binding Text}" />
+                            <DataGridTextColumn Header="Start" Binding="{Binding StartFrame}" />
+                            <DataGridTextColumn Header="Stop" Binding="{Binding StopFrame}" />
 
-                            <DataGridTemplateColumn Header="Remove" Width="90">
+                            <DataGridTemplateColumn Header="Remove">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Remove"/>
+                                        <Button Content="Remove"
+                                                Click="RemoveTextSegment_Click" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Text" Binding="{Binding Text}" />
-                            <DataGridTextColumn Header="Start Frame" Binding="{Binding StartFrame}" />
-                            <DataGridTextColumn Header="End Frame" Binding="{Binding EndFrame}" />
                         </DataGrid.Columns>
+
                     </DataGrid>
                 </Grid>
             </Grid>

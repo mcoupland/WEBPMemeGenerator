@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WEBPMemeGenerator.Classes;
+namespace WEBPMemeGenerator.Models;
 
 public class TextSegmentModel : INotifyPropertyChanged
 {
