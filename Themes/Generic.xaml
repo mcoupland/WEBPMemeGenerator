@@ -10,19 +10,19 @@
         <Setter Property="Margin" Value="5,3"/>
         <Setter Property="Padding" Value="3,2"/>
         <Setter Property="FontSize" Value="14"/>
-        <!--FontFamily Montserrat-Light-->
+        <Setter Property="FontFamily" Value="{DynamicResource Montserrat-Light}"/>
     </Style>
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="5,3"/>
         <Setter Property="Padding" Value="3,2"/>
         <Setter Property="FontSize" Value="14"/>
-        <!--FontFamily Montserrat-Regular-->
+        <Setter Property="FontFamily" Value="{DynamicResource Montserrat-Regular}"/>
     </Style>
     <Style TargetType="Button">
         <Setter Property="Margin" Value="5,3"/>
         <Setter Property="Padding" Value="3,2"/>
         <Setter Property="FontSize" Value="14"/>
-        <!--FontFamily Montserrat-Light-->
+        <Setter Property="FontFamily" Value="{DynamicResource Montserrat-Light}"/>
     </Style>
     <Style TargetType="DockPanel">
         <Setter Property="Margin" Value="5,3"/>

@@ -6,11 +6,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/WEBPMemeGenerator;component/Themes/Generic.xaml"/>
                 <ResourceDictionary>
                     <FontFamily x:Key="Montserrat-Light">pack://application:,,,/Fonts/#Montserrat Light</FontFamily>
                     <FontFamily x:Key="Montserrat-Regular">pack://application:,,,/Fonts/#Montserrat</FontFamily>
                 </ResourceDictionary>
+                <ResourceDictionary Source="/WEBPMemeGenerator;component/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
