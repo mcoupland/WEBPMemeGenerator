@@ -15,4 +15,9 @@
     <PackageReference Include="SkiaSharp.Views.WPF" Version="3.119.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+    <Folder Include="Themes\" />
+  </ItemGroup>
+
 </Project>

@@ -10,15 +10,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WEBPMemeGenerator.Classes;
 
 namespace WEBPMemeGenerator
 {
     /// <summary>
     /// Interaction logic for TextSegment.xaml
     /// </summary>
-    public partial class TextSegment : UserControl
+    public partial class TextSegmentControl : UserControl
     {
-        public TextSegment()
+        private TextSegmentModel _textSegment;
+
+        public TextSegmentControl()
         {
             InitializeComponent();
         }

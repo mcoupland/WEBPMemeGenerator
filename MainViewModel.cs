@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using WEBPMemeGenerator.Classes;
 
 namespace WEBPMemeGenerator;
 
@@ -11,7 +12,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private double _durationSeconds;
     private double _currentTimeSeconds;
 
-    public ObservableCollection<TextSegment> TextSegments { get; } = new();
+    public ObservableCollection<TextSegmentModel> TextSegments { get; } = new();
 
     public string FileName
     {
