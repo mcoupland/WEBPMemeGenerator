@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:skia="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
         Title="WEBP Text Editor"
-        Width="1000"
-        Height="700"
+        Width="1200"
+        Height="800"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
@@ -47,9 +48,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Content="Add Text Segment"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"/>
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Click="AddTextSegment_Click"/>
 
                     <Button Content="Decrease Font Size"                        
                         Grid.Row="0"
@@ -79,6 +81,9 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Text" Binding="{Binding Text}" />
+                            <DataGridTextColumn Header="Start Frame" Binding="{Binding StartFrame}" />
+                            <DataGridTextColumn Header="End Frame" Binding="{Binding EndFrame}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

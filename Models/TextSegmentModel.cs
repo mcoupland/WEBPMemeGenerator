@@ -1,15 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-namespace WEBPMemeGenerator.Classes
+namespace WEBPMemeGenerator.Classes;
+
+public class TextSegmentModel : INotifyPropertyChanged
 {
-    public class TextSegmentModel
-    {
-        private string _text = "New text";
-        private int _startFrame;
-        private int _stopFrame;
-        private int _maxFrame;
+    private string _text = "New text";
+    private int _startFrame = 1;
+    private int _stopFrame = 1;
+    private int _maxFrame = 1;
 
+    public string Text
+    {
+        get => _text;
+        set => SetField(ref _text, value);
+    }
+
+    public int StartFrame
+    {
+        get => _startFrame;
+        set => SetField(ref _startFrame, value);
+    }
+
+    public int StopFrame
+    {
+        get => _stopFrame;
+        set => SetField(ref _stopFrame, value);
+    }
+
+    public int MaxFrame
+    {
+        get => _maxFrame;
+        set => SetField(ref _maxFrame, value);
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (Equals(field, value))
+            return;
+
+        field = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

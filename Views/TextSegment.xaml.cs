@@ -1,31 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WEBPMemeGenerator.Classes;
 
-namespace WEBPMemeGenerator
-{
-    /// <summary>
-    /// Interaction logic for TextSegment.xaml
-    /// </summary>
-    public partial class TextSegmentControl : UserControl
-    {
-        private TextSegmentModel _textSegment;
-        private int _startFrame;
-        private int _endFrame;
+namespace WEBPMemeGenerator;
 
-        public TextSegmentControl()
-        {
-            InitializeComponent();
-        }
+public partial class TextSegmentControl : UserControl
+{
+    public event EventHandler<TextSegmentModel>? Saved;
+
+    public TextSegmentControl()
+    {
+        InitializeComponent();
+    }
+
+    public TextSegmentControl(TextSegmentModel textSegment) : this()
+    {
+        TextSegment = textSegment;
+    }
+
+    public TextSegmentModel? TextSegment
+    {
+        get => DataContext as TextSegmentModel;
+        set => DataContext = value;
+    }
+
+    private void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (TextSegment is not null)
+            Saved?.Invoke(this, TextSegment);
     }
 }

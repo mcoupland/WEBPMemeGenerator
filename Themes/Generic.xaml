@@ -28,8 +28,7 @@
         <Setter Property="Margin" Value="5,3"/>
     </Style>
     <Style TargetType="DataGrid">
-        <Setter Property="BorderThickness" Value="1,1,1,1"/>
-        <Setter Property="BorderBrush" Value="#569DE5"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CanUserAddRows" Value="False"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="AutoGenerateColumns" Value="False"/>

@@ -18,14 +18,15 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label Content="Text:"/>
-        <TextBlock Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
-                   VerticalAlignment="Center"
-                   Grid.Column="1"/>
-        <xctk:IntegerUpDown Name="StartFrameValue"
-                                Minimum="1"
-                                Grid.Column="2"/>
-        <xctk:IntegerUpDown Name="EndFrameValue"
-                                Minimum="1"
-                                Grid.Column="3"/>
+
+        <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+
+        <xctk:IntegerUpDown Value="{Binding StartFrame, UpdateSourceTrigger=PropertyChanged}"
+                    Minimum="1"
+                    Maximum="{Binding MaxFrame}" />
+
+        <xctk:IntegerUpDown Value="{Binding StopFrame, UpdateSourceTrigger=PropertyChanged}"
+                    Minimum="1"
+                    Maximum="{Binding MaxFrame}" />
     </Grid>
 </UserControl>

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
+using WEBPMemeGenerator.Classes;
 
 namespace WEBPMemeGenerator;
 
@@ -28,5 +29,19 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        DataContext = _vm;
+    }
+
+    private void AddTextSegment_Click(object sender, RoutedEventArgs e)
+    {
+        var model = new TextSegmentModel
+        {
+            Text = "New text",
+            StartFrame = 1,
+            EndFrame = _frames.Length,
+            MaxFrame = _frames.Length
+        };
+
+        var control = new TextSegmentControl(model);
     }
 }
